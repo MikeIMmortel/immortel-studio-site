@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# Claude Code local config
+.claude/
+
+# Staging folder for images downloaded from the old site
+images/_scraped/
+
+# Logs
+*.log

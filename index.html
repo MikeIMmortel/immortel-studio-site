@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Immortel Studio — Meubels op maat</title>
+  <meta name="description" content="Immortel Studio maakt onsterfelijke meubels op maat. Van idee tot product — CAD/CAM, prototyping en eigen productie.">
+  <meta name="theme-color" content="#f1e4d8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Nunito: closest free fallback for Arial Rounded MT Bold (brand display)
+       Instrument Serif: editorial italic accents -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="#hero" class="site-nav__mark" aria-label="Immortel Studio">
+      <img class="site-nav__logo" src="images/logo.png" alt="" width="28" height="28">
+      <span class="site-nav__wordmark">immortel studio</span>
+    </a>
+    <div class="site-nav__links">
+      <a href="#over">Over</a>
+      <a href="#werk">Werk</a>
+      <a href="#diensten">Diensten</a>
+      <a href="#lab">Projecten</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <header id="hero" class="hero">
+    <div class="hero__inner">
+      <h1 class="namemark" aria-label="Immortel Studio">
+        <span class="namemark__line" id="nameLine" data-state="start">
+          <!-- letters injected by JS -->
+        </span>
+        <span class="namemark__sub" id="nameSub">studio</span>
+      </h1>
+      <p class="hero__tag"><em>Van idee tot product</em> — meubels die blijven.</p>
+      <a href="#werk" class="hero__cta">Bekijk werk</a>
+    </div>
+    <div class="hero__scroll" aria-hidden="true">scroll</div>
+  </header>
+
+  <section id="over" class="section section--about">
+    <div class="section__inner about">
+      <div class="about__media">
+        <img src="images/mike.jpg" alt="Mike van de Mortel" loading="lazy">
+      </div>
+      <div class="about__body">
+        <p class="eyebrow"><em>Over</em></p>
+        <h2 class="h2 h2--display">Ik <em>ben</em>...</h2>
+        <div class="prose">
+          <p>Ik ben Mike van de Mortel, en Immortel Studio, dat ben ik.</p>
+          <p>Na het mede-oprichten en grootmaken van <a href="#lab">E3 Interieurbouw</a> voelde ik dat mijn werk daar klaar was. Het was tijd om iets nieuws te beginnen.</p>
+          <p>Nu richt ik me op Immortel Studio, waar ik nog steeds meubels maak, maar ook mijn kennis gebruik om nieuwe en unieke producten te ontwerpen.</p>
+          <p>Ik kan mensen verrassen met hoe ik vraagstukken oplos, door mijn frisse en originele invalshoek. En met 30 jaar ervaring in ontwerpen en productieprocessen, kan ik die ideeën niet alleen bedenken maar ook omzetten in functionele producten.</p>
+          <p><em>Stuur me je vraagstuk, en ik ga aan de slag!</em></p>
+          <p><a class="about__cta" href="mailto:mike@immortel.studio">Stuur e-mail →</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="werk" class="section section--work">
+    <div class="section__inner">
+      <header class="section__head">
+        <p class="eyebrow"><em>Werk</em></p>
+        <h2 class="h2">Recent gemaakt.</h2>
+      </header>
+      <div class="project-grid" id="projectGrid">
+        <!-- cards injected by JS from projects.json -->
+      </div>
+    </div>
+  </section>
+
+  <section id="diensten" class="section section--services">
+    <div class="section__inner">
+      <header class="section__head">
+        <p class="eyebrow"><em>Diensten</em></p>
+        <h2 class="h2">Van idee <em>tot</em> product.</h2>
+      </header>
+      <ol class="services">
+        <li class="service">
+          <span class="service__num">01</span>
+          <div class="service__body">
+            <h3>Creatief brainstormen &amp; advies</h3>
+            <p>Out-of-the-box oplossingen voor specifieke problemen en uitdagingen. Advies op maat voor interieur- en productontwerp, met een unieke en originele invalshoek.</p>
+          </div>
+        </li>
+        <li class="service">
+          <span class="service__num">02</span>
+          <div class="service__body">
+            <h3>Op maat ontwerpen</h3>
+            <p>Meubels en producten met behulp van CAD/CAM-software voor technische precisie. Gedetailleerde ontwerpen die esthetiek en functionaliteit combineren, afgestemd op de wensen van de klant.</p>
+          </div>
+        </li>
+        <li class="service">
+          <span class="service__num">03</span>
+          <div class="service__body">
+            <h3>Prototyping &amp; testen</h3>
+            <p>Fysieke prototypes met behulp van 3D-printen en CNC-machines. Mogelijkheid om producten te ervaren en aanpassingen te doen voor de uiteindelijke productie.</p>
+          </div>
+        </li>
+        <li class="service">
+          <span class="service__num">04</span>
+          <div class="service__body">
+            <h3>Productie en realisatie van maatwerk meubels</h3>
+            <p>Unieke meubels en producten in een moderne werkplaats, uitgerust met geavanceerde houtbewerkingsmachines. Kleine productieseries en volledig maatwerk met hoge kwaliteit en aandacht voor detail.</p>
+          </div>
+        </li>
+        <li class="service">
+          <span class="service__num">05</span>
+          <div class="service__body">
+            <h3>Industrieel productontwerp</h3>
+            <p>Producten die verder gaan dan interieurbouw, zoals functionele gadgets en gebruiksvoorwerpen. Technische kennis en creatieve ontwerpen voor praktische en innovatieve producten.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="lab" class="section section--lab">
+    <div class="section__inner">
+      <header class="section__head">
+        <p class="eyebrow"><em>Projecten</em></p>
+        <h2 class="h2">Eigen <em>projecten</em>.</h2>
+        <p class="lab__intro">Een greep uit projecten waar ik aan bijgedragen heb — van interieurbouw tot productontwerp en software.</p>
+      </header>
+      <div class="lab__grid">
+        <a class="lab__card" data-project="e3" href="http://www.e3interieurbouw.nl" target="_blank" rel="noopener">
+          <div class="lab__card__media"><img src="images/lab/e3.jpg" alt="E3 Interieurbouw" loading="lazy"></div>
+          <div class="lab__card__body">
+            <h3>E3 Interieurbouw</h3>
+            <p>Bij E3 Interieurbouw leerde ik projecten efficiënt en professioneel aan te pakken. Die ervaring neem ik mee naar Immortel Studio, waar ik me weer focus op mijn passie: op maat gemaakte meubels.</p>
+            <span class="lab__card__link">e3interieurbouw.nl <span aria-hidden="true">↗</span></span>
+          </div>
+        </a>
+        <a class="lab__card" data-project="voeljefoto" href="/voeljefoto/">
+          <div class="lab__card__media"><img src="images/lab/voeljefoto.jpg" alt="VoelJeFoto" loading="lazy"></div>
+          <div class="lab__card__body">
+            <h3>VoelJeFoto</h3>
+            <p>Met mijn ervaring in CNC-houtbewerking was Voeljefoto.nl een mooi project om producten buiten de interieurbouw te creëren. Door foto's tastbaar te maken via houtgravures, combineerde ik technologie en creativiteit.</p>
+            <span class="lab__card__meta"><em>Sinds 2014</em></span>
+            <span class="lab__card__link">Meer over VoelJeFoto <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+        <a class="lab__card" data-project="fdock" href="/f-dock/">
+          <div class="lab__card__media"><img src="images/lab/fdock.jpg" alt="F-Dock" loading="lazy"></div>
+          <div class="lab__card__body">
+            <h3>F-Dock</h3>
+            <p>Bij F-Dock leerde ik technologie en functionaliteit te combineren in productontwerp. Die ervaring pas ik nog steeds toe in mijn projecten bij Immortel Studio, waar ik innovatieve oplossingen blijf creëren.</p>
+            <span class="lab__card__meta"><em>Niet langer in productie</em></span>
+            <span class="lab__card__link">Meer over F-Dock <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+        <a class="lab__card" data-project="strwky" href="http://www.strwky.com" target="_blank" rel="noopener">
+          <div class="lab__card__media"><img src="images/lab/strwky.jpg" alt="Strwky" loading="lazy"></div>
+          <div class="lab__card__body">
+            <h3>Strwky</h3>
+            <p>Met Strwky heb ik een praktische oplossing bedacht voor een dagelijks probleem. De ervaring om simpele, functionele producten te ontwerpen, gebruik ik nu bij Immortel Studio om nieuwe ideeën tot leven te brengen.</p>
+            <span class="lab__card__link">strwky.com <span aria-hidden="true">↗</span></span>
+          </div>
+        </a>
+        <a class="lab__card lab__card--wip" data-project="panelmaker" href="/panelmaker/">
+          <div class="lab__card__media"><img src="images/lab/panelmaker.jpg" alt="Panel Maker" loading="lazy"></div>
+          <div class="lab__card__body">
+            <h3>Panel Maker</h3>
+            <p>Ontwerp unieke 3D-panelen op maat met patronen, afmetingen en materialen die perfect aansluiten bij jouw project. Deze tool biedt een snelle en gebruiksvriendelijke oplossing voor interieur- en productdesign.</p>
+            <span class="lab__card__meta"><em>Generatief project — in ontwikkeling</em></span>
+            <span class="lab__card__link">Meer over Panel Maker <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+        <article class="lab__card lab__card--wip" data-project="cabinetflow">
+          <div class="lab__card__media"><img src="images/lab/cabinetflow.jpg" alt="Cabinetflow" loading="lazy"></div>
+          <div class="lab__card__body">
+            <h3>Cabinetflow</h3>
+            <p>Fusion 360 add-in en macOS app voor kastenmakers. Van BLUM-import en materiaaltoewijzing tot offerte en CNC-export.</p>
+            <span class="lab__card__meta"><em>In ontwikkeling</em></span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section section--contact">
+    <div class="section__inner">
+      <p class="eyebrow"><em>Contact</em></p>
+      <h2 class="h2 h2--contact"><em>Laat</em> iets maken.</h2>
+      <p class="contact__intro">Vertel me over je project — kort of uitgebreid, allebei goed.</p>
+      <div class="contact__row">
+        <a class="contact__link" href="mailto:mike@immortel.studio">mike@immortel.studio</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-foot">
+    <div class="site-foot__inner">
+      <span>© <span id="year"></span> Immortel Studio</span>
+      <img class="site-foot__logo" src="images/logo.png" alt="" width="20" height="20">
+      <span class="site-foot__mark">i·m·mortel</span>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <button class="lightbox__close" aria-label="Sluiten">×</button>
+    <button class="lightbox__prev" aria-label="Vorige">‹</button>
+    <button class="lightbox__next" aria-label="Volgende">›</button>
+    <div class="lightbox__stage">
+      <img id="lightboxImg" alt="">
+    </div>
+    <div class="lightbox__count" id="lightboxCount"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

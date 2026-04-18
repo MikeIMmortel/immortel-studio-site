@@ -1,0 +1,66 @@
+{
+  "projects": [
+    {
+      "slug": "tv-meubel",
+      "title": "TV-meubel",
+      "summary": "Zwevend TV-meubel op maat, mat afgewerkt, met lade-indeling.",
+      "photos": [
+        "images/tv-meubel/01.jpg",
+        "images/tv-meubel/02.jpg",
+        "images/tv-meubel/03.jpg",
+        "images/tv-meubel/04.jpg",
+        "images/tv-meubel/05.jpg",
+        "images/tv-meubel/06.jpg",
+        "images/tv-meubel/07.jpg"
+      ]
+    },
+    {
+      "slug": "keuken",
+      "title": "Keuken",
+      "summary": "Keuken op maat, greeploos, met geïntegreerde apparatuur.",
+      "photos": [
+        "images/keuken/01.jpg",
+        "images/keuken/02.jpg",
+        "images/keuken/03.jpg",
+        "images/keuken/04.jpg",
+        "images/keuken/05.jpg"
+      ]
+    },
+    {
+      "slug": "kantoor",
+      "title": "Kantoorinrichting",
+      "summary": "Werkplek op maat — bureau, wandkast en berging in één.",
+      "photos": [
+        "images/kantoor/01.jpg",
+        "images/kantoor/02.jpg",
+        "images/kantoor/03.jpg"
+      ]
+    },
+    {
+      "slug": "inbouwkast",
+      "title": "Inbouwkast",
+      "summary": "Wand-tot-wand inbouwkast, strak ingepast in bestaande architectuur.",
+      "photos": [
+        "images/inbouwkast/01.jpg",
+        "images/inbouwkast/02.jpg"
+      ]
+    },
+    {
+      "slug": "badkamer",
+      "title": "Badkamermeubel",
+      "summary": "Badkamermeubel op maat, waterbestendig afgewerkt.",
+      "photos": [
+        "images/badkamer/01.jpg",
+        "images/badkamer/02.jpg"
+      ]
+    },
+    {
+      "slug": "kledingkast",
+      "title": "Kledingkast",
+      "summary": "Kledingkast op maat met indeling naar gebruik.",
+      "photos": [
+        "images/kledingkast/01.jpg"
+      ]
+    }
+  ]
+}
