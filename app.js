@@ -13,9 +13,9 @@
   const hero = document.getElementById('hero');
   if (!line) return;
 
-  // Source "I AM VAN DE MORTEL" — KEEP indices form "I M MORTEL" = IMMORTEL
-  const SOURCE = 'I AM VAN DE MORTEL';
-  const KEEP = new Set([0, 3, 12, 13, 14, 15, 16, 17]);
+  // Source "I AM VANDEMORTEL" — KEEP indices form "I M MORTEL" = IMMORTEL
+  const SOURCE = 'I AM VANDEMORTEL';
+  const KEEP = new Set([0, 3, 10, 11, 12, 13, 14, 15]);
 
   const frag = document.createDocumentFragment();
   for (let i = 0; i < SOURCE.length; i++) {

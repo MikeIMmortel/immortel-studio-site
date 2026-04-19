@@ -238,8 +238,9 @@ em {
   display: inline-flex;
   white-space: nowrap;
   justify-content: center;
+  align-items: flex-end;
   flex-wrap: nowrap;
-  /* Single size that fits both "IMMORTEL" and "I AM VAN DE MORTEL" without reflow */
+  /* Single size that fits both "IMMORTEL" and "I AM VANDEMORTEL" without reflow */
   font-size: clamp(2rem, 7vw, 6rem);
 }
 .letter {
