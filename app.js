@@ -130,8 +130,11 @@ document.getElementById('year').textContent = new Date().getFullYear();
         <img src="${p.photos[0]}" alt="${p.title}" loading="lazy">
       </div>
       <div class="project-card__meta">
-        <h3 class="project-card__title">${p.title}</h3>
-        <span class="project-card__count">${p.photos.length} ${p.photos.length === 1 ? 'foto' : "foto's"}</span>
+        <div class="project-card__head">
+          <h3 class="project-card__title">${p.title}</h3>
+          <span class="project-card__count">${p.photos.length} ${p.photos.length === 1 ? 'foto' : "foto's"}</span>
+        </div>
+        ${p.summary ? `<p class="project-card__summary">${p.summary}</p>` : ''}
       </div>
     `;
     grid.appendChild(card);
