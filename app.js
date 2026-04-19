@@ -88,6 +88,33 @@ document.getElementById('year').textContent = new Date().getFullYear();
   onScroll();
 })();
 
+// --------- Mobile hamburger menu ----------
+(function mobileMenu() {
+  const nav = document.querySelector('.site-nav');
+  const toggle = nav?.querySelector('.site-nav__toggle');
+  const menu = nav?.querySelector('.site-nav__links');
+  if (!nav || !toggle || !menu) return;
+
+  const open = () => {
+    nav.dataset.menu = 'open';
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('menu-open');
+  };
+  const close = () => {
+    nav.dataset.menu = '';
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('menu-open');
+  };
+
+  toggle.addEventListener('click', () => {
+    nav.dataset.menu === 'open' ? close() : open();
+  });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.dataset.menu === 'open') close();
+  });
+})();
+
 // --------- Reveal on scroll ----------
 (function reveal() {
   const io = new IntersectionObserver((entries) => {
