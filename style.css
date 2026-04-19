@@ -264,7 +264,16 @@ em {
 
 /* Color hint: keep-letters (IMMORTEL) in solid ink; drop-letters fade to ghosted accent */
 .letter.keep { color: var(--ink); }
-.letter.drop { color: color-mix(in srgb, var(--accent) 70%, transparent); }
+.letter.drop {
+  color: color-mix(in srgb, var(--accent) 70%, transparent);
+  /* Drop-letters (A, VAN DE) kleiner getoond in expanded state */
+  font-size: .55em;
+  vertical-align: baseline;
+}
+.letter.drop.space,
+.letter.space {
+  font-size: .55em;
+}
 
 /* Staggered delay per drop/space letter — only applied when EXPANDING
    (default state). Collapse rule below zeroes delays for simultaneous morph. */
