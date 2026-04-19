@@ -1,66 +1,85 @@
 {
-  "projects": [
+  "projects" : [
     {
-      "slug": "tv-meubel",
-      "title": "TV-meubel",
-      "summary": "Zwevend TV-meubel op maat, mat afgewerkt, met lade-indeling.",
-      "photos": [
-        "images/tv-meubel/01.jpg",
-        "images/tv-meubel/02.jpg",
-        "images/tv-meubel/03.jpg",
-        "images/tv-meubel/04.jpg",
-        "images/tv-meubel/05.jpg",
-        "images/tv-meubel/06.jpg",
-        "images/tv-meubel/07.jpg"
-      ]
+      "photos" : [
+        "images\/inloopkast\/01.jpg",
+        "images\/inloopkast\/02.jpg"
+      ],
+      "slug" : "inloopkast",
+      "summary" : "open u opstelling met een dichte wandkast voor een opgeruimd gevoel.",
+      "title" : "Inloopkast"
     },
     {
-      "slug": "keuken",
-      "title": "Keuken",
-      "summary": "Keuken op maat, greeploos, met geïntegreerde apparatuur.",
-      "photos": [
-        "images/keuken/01.jpg",
-        "images/keuken/02.jpg",
-        "images/keuken/03.jpg",
-        "images/keuken/04.jpg",
-        "images/keuken/05.jpg"
-      ]
+      "photos" : [
+        "images\/garderobe\/01.jpg"
+      ],
+      "slug" : "garderobe",
+      "summary" : "Cubanietgrijs (u767-st9)fronten, lade-indeling, op maat gebouwd.",
+      "title" : "Garderobe"
     },
     {
-      "slug": "kantoor",
-      "title": "Kantoorinrichting",
-      "summary": "Werkplek op maat — bureau, wandkast en berging in één.",
-      "photos": [
-        "images/kantoor/01.jpg",
-        "images/kantoor/02.jpg",
-        "images/kantoor/03.jpg"
-      ]
+      "photos" : [
+        "images\/keuken-2\/01.jpg",
+        "images\/keuken-2\/02.jpg",
+        "images\/keuken-2\/03.jpg"
+      ],
+      "slug" : "keuken-2",
+      "summary" : "Keukenfronten 0h912 V2A, greeplijsten, binnenkasten antraciet grijs.vozien van softclose Legra lades",
+      "title" : "Keuken"
     },
     {
-      "slug": "inbouwkast",
-      "title": "Inbouwkast",
-      "summary": "Wand-tot-wand inbouwkast, strak ingepast in bestaande architectuur.",
-      "photos": [
-        "images/inbouwkast/01.jpg",
-        "images/inbouwkast/02.jpg"
-      ]
+      "photos" : [
+        "images\/badkamermeubel\/01.jpg"
+      ],
+      "slug" : "badkamermeubel",
+      "summary" : "Badkamermeubel met UH912 V2A-fronten en legra lades.",
+      "title" : "Badkamermeubel"
     },
     {
-      "slug": "badkamer",
-      "title": "Badkamermeubel",
-      "summary": "Badkamermeubel op maat, waterbestendig afgewerkt.",
-      "photos": [
-        "images/badkamer/01.jpg",
-        "images/badkamer/02.jpg"
-      ]
+      "photos" : [
+        "images\/tv-meubel\/01.jpg",
+        "images\/tv-meubel\/02.jpg"
+      ],
+      "slug" : "tv-meubel",
+      "summary" : "Slaapkamerkast met U740-ST9-Donkertaupe fronten, Legrabox lades en zwarte stangen.",
+      "title" : "Slaapkamer"
     },
     {
-      "slug": "kledingkast",
-      "title": "Kledingkast",
-      "summary": "Kledingkast op maat met indeling naar gebruik.",
-      "photos": [
-        "images/kledingkast/01.jpg"
-      ]
+      "photos" : [
+        "images\/keuken\/01.jpg",
+        "images\/keuken\/02.jpg",
+        "images\/keuken\/03.jpg"
+      ],
+      "slug" : "keuken",
+      "summary" : "Keuken op maat, greeploos, met geïntegreerde apparatuur.",
+      "title" : "Keuken"
+    },
+    {
+      "photos" : [
+        "images\/kantoor\/01.jpg",
+        "images\/kantoor\/02.jpg",
+        "images\/kantoor\/03.jpg"
+      ],
+      "slug" : "kantoor",
+      "summary" : "Werkplek op maat — bureau, wandkast en berging in één.",
+      "title" : "Kantoorinrichting"
+    },
+    {
+      "photos" : [
+        "images\/inbouwkast\/01.jpg",
+        "images\/inbouwkast\/02.jpg"
+      ],
+      "slug" : "inbouwkast",
+      "summary" : "Wand-tot-wand inbouwkast, strak ingepast in bestaande architectuur.",
+      "title" : "Inbouwkast"
+    },
+    {
+      "photos" : [
+        "images\/kledingkast\/01.jpg"
+      ],
+      "slug" : "kledingkast",
+      "summary" : "Overloopkast in St19 Fineline middengrijs met uitneembare rug t.b.v. vloerverwarming aansluitingen.",
+      "title" : "overloopkast"
     }
   ]
 }
