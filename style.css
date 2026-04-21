@@ -96,6 +96,7 @@ em {
 }
 .site-nav__logo {
   width: 26px; height: 26px;
+  filter: brightness(0) saturate(100%) invert(16%) sepia(8%) saturate(833%) hue-rotate(202deg) brightness(95%) contrast(88%);
 }
 .site-nav__wordmark {
   font-family: var(--font-display);
@@ -881,7 +882,8 @@ a.lab__card { cursor: pointer; }
 }
 .site-foot__logo {
   width: 20px; height: 20px;
-  opacity: .55;
+  opacity: .45;
+  filter: brightness(0) saturate(100%) invert(16%) sepia(8%) saturate(833%) hue-rotate(202deg) brightness(95%) contrast(88%);
 }
 
 /* ============================================================
