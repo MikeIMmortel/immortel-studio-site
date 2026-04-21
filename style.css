@@ -743,12 +743,14 @@ a.lab__card { cursor: pointer; }
 }
 .lab__card:hover .lab__card__media img { transform: scale(1.05); }
 
-/* Strwky packshot is taller than 4:3 — contain it zodat de blister heel blijft.
+/* Strwky + Panel Maker packshots zijn taller than 4:3 — contain ze zodat ze heel blijven.
    Achtergrond blijft de standaard light-green van .lab__card__media. */
-[data-project="strwky"] .lab__card__media {
+[data-project="strwky"] .lab__card__media,
+[data-project="panelmaker"] .lab__card__media {
   padding: .5rem;
 }
-[data-project="strwky"] .lab__card__media img {
+[data-project="strwky"] .lab__card__media img,
+[data-project="panelmaker"] .lab__card__media img {
   object-fit: contain;
 }
 .lab__card__media--empty {
