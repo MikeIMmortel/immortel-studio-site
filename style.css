@@ -186,6 +186,7 @@ em {
   font-weight: 700;
   font-size: .98rem;
   letter-spacing: .01em;
+  white-space: nowrap;
 }
 @media (max-width: 520px) {
   .site-nav__wordmark { display: none; }
@@ -207,7 +208,7 @@ em {
 }
 .site-nav__links a:hover::after { transform: scaleX(1); }
 
-/* Theme toggle button */
+/* Theme toggle — sits as the last item inside the nav links */
 .site-nav__theme {
   display: inline-flex;
   align-items: center;
@@ -220,8 +221,8 @@ em {
   border-radius: 999px;
   color: var(--ink);
   cursor: pointer;
-  order: 3;                 /* sit on the right, after the links */
-  margin-left: 1.2rem;
+  font: inherit;
+  margin-left: .4rem;
   transition: background .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease);
   -webkit-tap-highlight-color: transparent;
 }
@@ -233,17 +234,22 @@ em {
 html[data-theme="light"] .site-nav__theme-icon--moon,
 html:not([data-theme="dark"]) .site-nav__theme-icon--moon { display: block; }
 html[data-theme="dark"] .site-nav__theme-icon--sun { display: block; }
-.site-nav__links { order: 2; }
-.site-nav__toggle { order: 4; }
+.site-nav__theme-label { display: none; }          /* hidden on desktop — icon only */
+.site-nav__links { margin-left: auto; }
+
 @media (max-width: 640px) {
+  /* In the mobile overlay, render as a full pill with icon + label */
   .site-nav__theme {
-    order: 3;
-    margin-left: 0;
-    margin-right: .4rem;
-    width: 38px;
-    height: 38px;
+    width: auto;
+    height: auto;
+    margin: 1rem 0 0;
+    padding: .75rem 1.4rem;
+    gap: .65rem;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: .01em;
   }
-  .site-nav__toggle { order: 4; }
+  .site-nav__theme-label { display: inline; }
 }
 
 /* Hamburger toggle — hidden on desktop, visible on mobile */
@@ -667,16 +673,15 @@ body.menu-open { overflow: hidden; }
    ============================================================ */
 .project-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(2rem, 4vw, 3.5rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.25rem, 3vw, 3.5rem) clamp(1rem, 2vw, 3rem);
+}
+.project-grid .project-card:first-child {
+  grid-column: 1 / -1;
 }
 @media (min-width: 720px) {
   .project-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(2.5rem, 4vw, 4rem) clamp(2rem, 3vw, 3rem);
-  }
-  .project-grid .project-card:first-child {
-    grid-column: 1 / -1;
   }
   .project-grid .project-card:first-child .project-card__cover {
     aspect-ratio: 16 / 9;
@@ -758,9 +763,10 @@ body.menu-open { overflow: hidden; }
 .project-card__title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  font-size: clamp(1rem, 3.5vw, 1.5rem);
   letter-spacing: -.005em;
   margin: 0;
+  overflow-wrap: anywhere;
 }
 .project-card__count {
   font-family: var(--font-accent);
@@ -851,8 +857,13 @@ body.menu-open { overflow: hidden; }
 }
 .lab__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(1.5rem, 2.5vw, 2rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 2rem);
+}
+@media (min-width: 720px) {
+  .lab__grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
 }
 .lab__card {
   display: flex;
@@ -917,9 +928,10 @@ a.lab__card { cursor: pointer; }
   letter-spacing: .02em;
 }
 .lab__card__body {
-  padding: 1.6rem 1.5rem 1.9rem;
+  padding: clamp(1rem, 3vw, 1.6rem) clamp(1rem, 3vw, 1.5rem) clamp(1.2rem, 3vw, 1.9rem);
   display: flex; flex-direction: column; gap: .55rem;
   flex: 1;
+  min-width: 0;
 }
 .lab__card__meta {
   font-family: var(--font-accent);
@@ -960,15 +972,16 @@ a.lab__card { cursor: pointer; }
 .lab__card h3 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: clamp(1.02rem, 2.5vw, 1.25rem);
   letter-spacing: -.005em;
   margin: 0;
   color: var(--dark-grey);
+  overflow-wrap: anywhere;
 }
 .lab__card p {
   margin: 0;
-  font-size: .95rem;
-  line-height: 1.55;
+  font-size: clamp(.82rem, 2vw, .95rem);
+  line-height: 1.5;
   color: var(--dark-green);
 }
 
