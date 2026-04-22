@@ -88,6 +88,37 @@ document.getElementById('year').textContent = new Date().getFullYear();
   onScroll();
 })();
 
+// --------- Theme toggle (light / dark) ----------
+(function themeToggle() {
+  const btn = document.querySelector('.site-nav__theme');
+  if (!btn) return;
+
+  const root = document.documentElement;
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
+
+  const apply = (theme, persist) => {
+    root.setAttribute('data-theme', theme);
+    btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+    btn.setAttribute('aria-label', theme === 'dark' ? 'Schakel lichte modus' : 'Schakel donkere modus');
+    if (persist) {
+      try { localStorage.setItem('theme', theme); } catch (e) {}
+    }
+  };
+
+  const current = () => root.getAttribute('data-theme') || (media.matches ? 'dark' : 'light');
+  apply(current(), false);
+
+  btn.addEventListener('click', () => {
+    apply(current() === 'dark' ? 'light' : 'dark', true);
+  });
+
+  // Follow system changes only if the user hasn't explicitly chosen
+  media.addEventListener?.('change', (e) => {
+    try { if (localStorage.getItem('theme')) return; } catch (_) {}
+    apply(e.matches ? 'dark' : 'light', false);
+  });
+})();
+
 // --------- Mobile hamburger menu ----------
 (function mobileMenu() {
   const nav = document.querySelector('.site-nav');
