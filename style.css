@@ -585,6 +585,42 @@ body.menu-open { overflow: hidden; }
   width: 100%; height: 100%; object-fit: cover;
   transition: transform 1s var(--ease), filter .4s var(--ease);
 }
+.project-card__badge {
+  position: absolute;
+  top: .75rem;
+  right: .75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .45rem .7rem;
+  background: rgba(20, 20, 20, .72);
+  color: #fff;
+  border-radius: 999px;
+  font-family: var(--font-accent, inherit);
+  font-size: .95rem;
+  font-weight: 600;
+  line-height: 1;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
+}
+.project-card__badge-icon {
+  width: 1.05em;
+  height: 1.05em;
+  display: block;
+}
+.project-card__badge-count {
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 640px) {
+  .project-card__badge {
+    top: .6rem;
+    right: .6rem;
+    padding: .5rem .75rem;
+    font-size: 1rem;
+  }
+}
 .project-card:hover .project-card__cover img {
   transform: scale(1.04);
   filter: brightness(.98);
@@ -1042,6 +1078,67 @@ a.lab__card { cursor: pointer; }
   background: var(--ink);
   color: var(--bg);
   gap: .7rem;
+}
+
+/* Feature rows — stacked, alternating */
+.project-body .project-body__inner + .project-body__inner {
+  margin-top: clamp(3.5rem, 7vw, 6rem);
+}
+@media (min-width: 820px) {
+  .project-body__inner--reverse > .project-body__media,
+  .project-body__inner--reverse > .project-body__media--screenshot {
+    order: 2;
+  }
+}
+.project-body .prose h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 .6rem;
+}
+
+/* Screenshot-style media (UI captures, not product shots) */
+.project-body__media--screenshot {
+  aspect-ratio: 16 / 9;
+  max-width: 720px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 18px 40px -24px rgba(0,0,0,.35);
+  background: #fff;
+}
+.project-body__media--screenshot img {
+  object-fit: cover;
+  mix-blend-mode: normal;
+}
+
+/* Placeholder for missing screenshots */
+.project-body__media--placeholder {
+  aspect-ratio: 16 / 9;
+  max-width: 720px;
+  border-radius: 10px;
+  border: 1px dashed rgba(0,0,0,.2);
+  background: rgba(0,0,0,.02);
+  display: grid;
+  place-items: center;
+}
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .35rem;
+  color: var(--dark-grey);
+  text-align: center;
+  padding: 1rem;
+}
+.placeholder__label {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 1.2rem;
+}
+.placeholder__hint {
+  font-size: .9rem;
+  opacity: .7;
 }
 
 .project-video {

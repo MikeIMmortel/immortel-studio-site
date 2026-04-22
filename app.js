@@ -152,9 +152,19 @@ document.getElementById('year').textContent = new Date().getFullYear();
     card.className = 'project-card reveal';
     card.type = 'button';
     card.dataset.projectIdx = idx;
+    const hasMultiple = p.photos.length > 1;
     card.innerHTML = `
       <div class="project-card__cover">
         <img src="${p.photos[0]}" alt="${p.title}" loading="lazy">
+        ${hasMultiple ? `
+          <span class="project-card__badge" aria-label="${p.photos.length} foto's in dit project">
+            <svg class="project-card__badge-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="7" y="7" width="13" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M4 16V5a1 1 0 0 1 1-1h11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span class="project-card__badge-count">${p.photos.length}</span>
+          </span>
+        ` : ''}
       </div>
       <div class="project-card__meta">
         <div class="project-card__head">
