@@ -2,6 +2,20 @@
   "projects" : [
     {
       "photos" : [
+        "images\/keuken-3\/01.jpg",
+        "images\/keuken-3\/02.jpg",
+        "images\/keuken-3\/03.jpg",
+        "images\/keuken-3\/04.jpg",
+        "images\/keuken-3\/05.jpg",
+        "images\/keuken-3\/06-render.jpg",
+        "images\/keuken-3\/07.jpg"
+      ],
+      "slug" : "keuken-3",
+      "summary" : "Keukenkasten, hout en terrazzo en zwarte grepen.",
+      "title" : "Keuken"
+    },
+    {
+      "photos" : [
         "images\/inloopkast\/01.jpg",
         "images\/inloopkast\/02.jpg"
       ],
