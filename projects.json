@@ -2,6 +2,16 @@
   "projects" : [
     {
       "photos" : [
+        "images\/niskast-graphite-black\/01.jpg",
+        "images\/niskast-graphite-black\/02-render.jpg",
+        "images\/niskast-graphite-black\/03.jpg"
+      ],
+      "slug" : "niskast-graphite-black",
+      "summary" : "Niskast Graphite Black met hue ledstrips achter de schappen en onder twee tip-on deuren",
+      "title" : "Niskast Graphite Black"
+    },
+    {
+      "photos" : [
         "images\/keuken-3\/01.jpg",
         "images\/keuken-3\/02.jpg",
         "images\/keuken-3\/03.jpg",
