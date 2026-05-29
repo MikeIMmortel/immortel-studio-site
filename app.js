@@ -300,8 +300,9 @@ document.getElementById('year').textContent = new Date().getFullYear();
   function endSwipe() {
     if (!dragging) return;
     dragging = false;
-    swiped = horizontal && Math.abs(dx) > 8;
     if (horizontal && Math.abs(dx) > SWIPE_THRESHOLD) {
+      swiped = true;
+      setTimeout(() => { swiped = false; }, 350); // self-clear so it never eats a later tap
       lbImg.style.transition = 'none';
       lbImg.style.transform = '';
       step(dx < 0 ? +1 : -1); // swipe left → next, swipe right → previous
