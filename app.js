@@ -224,6 +224,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
   let currentProject = null;
   let currentIndex = 0;
+  let swiped = false;
 
   function open(projectIdx, photoIdx = 0) {
     currentProject = projects[projectIdx];
@@ -260,11 +261,55 @@ document.getElementById('year').textContent = new Date().getFullYear();
   btnPrev.addEventListener('click', () => step(-1));
   btnNext.addEventListener('click', () => step(+1));
   btnClose.addEventListener('click', close);
-  lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+  lb.addEventListener('click', (e) => {
+    if (swiped) { swiped = false; return; } // ignore the click that ends a swipe
+    if (e.target === lb) close();
+  });
   document.addEventListener('keydown', (e) => {
     if (lb.dataset.open !== '1') return;
     if (e.key === 'Escape') close();
     if (e.key === 'ArrowLeft') step(-1);
     if (e.key === 'ArrowRight') step(+1);
   });
+
+  // --------- Touch swipe (iPad / phone) ----------
+  // Drag the photo with one finger; release past the threshold to navigate.
+  let startX = 0, startY = 0, dx = 0, dragging = false, horizontal = null;
+  const SWIPE_THRESHOLD = 45; // px before a horizontal swipe counts as navigation
+
+  lb.addEventListener('touchstart', (e) => {
+    if (lb.dataset.open !== '1' || !currentProject) return;
+    if (currentProject.photos.length < 2 || e.touches.length !== 1) return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dx = 0; dragging = true; horizontal = null;
+    lbImg.style.transition = 'none';
+  }, { passive: true });
+
+  lb.addEventListener('touchmove', (e) => {
+    if (!dragging || e.touches.length !== 1) return;
+    dx = e.touches[0].clientX - startX;
+    const dy = e.touches[0].clientY - startY;
+    if (horizontal === null) horizontal = Math.abs(dx) > Math.abs(dy);
+    if (horizontal) {
+      e.preventDefault(); // claim the gesture so the page / back-swipe stays put
+      lbImg.style.transform = `translateX(${dx}px)`;
+    }
+  }, { passive: false });
+
+  function endSwipe() {
+    if (!dragging) return;
+    dragging = false;
+    swiped = horizontal && Math.abs(dx) > 8;
+    if (horizontal && Math.abs(dx) > SWIPE_THRESHOLD) {
+      lbImg.style.transition = 'none';
+      lbImg.style.transform = '';
+      step(dx < 0 ? +1 : -1); // swipe left → next, swipe right → previous
+    } else {
+      lbImg.style.transition = 'transform .25s ease';
+      lbImg.style.transform = '';
+    }
+  }
+  lb.addEventListener('touchend', endSwipe);
+  lb.addEventListener('touchcancel', endSwipe);
 })();

@@ -1065,6 +1065,9 @@ a.lab__card { cursor: pointer; }
   max-width: 92vw;
   max-height: 90vh;
   object-fit: contain;
+  touch-action: pan-y pinch-zoom; /* horizontal swipe handled in JS; keep pinch-zoom */
+  -webkit-user-drag: none;
+  user-select: none;
 }
 .lightbox__close,
 .lightbox__prev,
