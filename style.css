@@ -1056,16 +1056,31 @@ a.lab__card { cursor: pointer; }
   align-items: center; justify-content: center;
 }
 .lightbox[data-open="1"] { display: flex; }
-.lightbox__stage {
-  max-width: 92vw;
-  max-height: 90vh;
-  display: flex; align-items: center; justify-content: center;
+.lightbox__viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  touch-action: pan-y; /* horizontal swipe is handled in JS */
 }
-.lightbox__stage img {
+.lightbox__track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  transform: translate3d(-100%, 0, 0); /* centre = the middle slide */
+}
+.lightbox__slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox__slide img {
   max-width: 92vw;
   max-height: 90vh;
   object-fit: contain;
-  touch-action: pan-y pinch-zoom; /* horizontal swipe handled in JS; keep pinch-zoom */
   -webkit-user-drag: none;
   user-select: none;
 }
@@ -1073,6 +1088,7 @@ a.lab__card { cursor: pointer; }
 .lightbox__prev,
 .lightbox__next {
   position: absolute;
+  z-index: 2; /* above the full-screen viewport so they stay clickable */
   background: transparent; color: #fff;
   border: none; cursor: pointer;
   width: 48px; height: 48px;

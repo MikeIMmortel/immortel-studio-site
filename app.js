@@ -215,24 +215,101 @@ document.getElementById('year').textContent = new Date().getFullYear();
   }, { threshold: 0.1 });
   grid.querySelectorAll('.project-card').forEach(el => io.observe(el));
 
-  const lb      = document.getElementById('lightbox');
-  const lbImg   = document.getElementById('lightboxImg');
-  const lbCount = document.getElementById('lightboxCount');
-  const btnPrev = lb.querySelector('.lightbox__prev');
-  const btnNext = lb.querySelector('.lightbox__next');
-  const btnClose= lb.querySelector('.lightbox__close');
+  const lb       = document.getElementById('lightbox');
+  const lbCount  = document.getElementById('lightboxCount');
+  const viewport = lb.querySelector('.lightbox__viewport');
+  const track    = lb.querySelector('.lightbox__track');
+  const btnPrev  = lb.querySelector('.lightbox__prev');
+  const btnNext  = lb.querySelector('.lightbox__next');
+  const btnClose = lb.querySelector('.lightbox__close');
 
+  // Three slides act as a [prev, current, next] window onto the photo list.
+  let slides = Array.from(track.children);
+  let imgs   = slides.map(s => s.querySelector('img'));
+
+  const EASE = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
   let currentProject = null;
   let currentIndex = 0;
-  let swiped = false;
+  let swiped = false;     // suppress the click synthesised at the end of a drag
+  let animating = false;  // lock input while a settle animation runs
+  let W = 0;              // viewport width in px
+
+  const wrap = (i) => {
+    const n = currentProject.photos.length;
+    return ((i % n) + n) % n;
+  };
+  const photoAt = (offset) => currentProject.photos[wrap(currentIndex + offset)];
+
+  const setTrack = (x, dur) => {
+    track.style.transition = dur ? `transform ${dur}ms ${EASE}` : 'none';
+    track.style.transform = `translate3d(${x}px, 0, 0)`;
+  };
+
+  // Build all three slides for the current index and centre the track instantly.
+  function render() {
+    if (!currentProject) return;
+    imgs[0].src = photoAt(-1);
+    imgs[1].src = photoAt(0);
+    imgs[2].src = photoAt(1);
+    imgs[1].alt = `${currentProject.title} — foto ${currentIndex + 1}`;
+    imgs[0].alt = imgs[2].alt = '';
+    lbCount.textContent = `${currentIndex + 1} / ${currentProject.photos.length}`;
+    W = viewport.clientWidth;
+    setTrack(-W, 0);
+    void track.offsetWidth; // flush so the next transition starts cleanly
+  }
+
+  function animateTrackTo(x, dur, done) {
+    setTrack(x, dur);
+    let fired = false;
+    const finish = () => {
+      if (fired) return;
+      fired = true;
+      track.removeEventListener('transitionend', onEnd);
+      if (done) done();
+    };
+    const onEnd = (e) => { if (e.propertyName === 'transform') finish(); };
+    track.addEventListener('transitionend', onEnd);
+    setTimeout(finish, dur + 60); // fallback if transitionend is missed
+  }
+
+  // After a settle, rotate the slide elements so the now-centred photo stays put
+  // (no src swap on the visible slide → no flicker), then refresh the neighbours.
+  function recycle(dir) {
+    currentIndex = wrap(currentIndex + dir);
+    if (dir > 0) track.appendChild(track.firstElementChild);
+    else         track.insertBefore(track.lastElementChild, track.firstElementChild);
+    slides = Array.from(track.children);
+    imgs   = slides.map(s => s.querySelector('img'));
+    W = viewport.clientWidth;
+    setTrack(-W, 0);
+    void track.offsetWidth;
+    imgs[0].src = photoAt(-1);
+    imgs[2].src = photoAt(1);
+    imgs[1].alt = `${currentProject.title} — foto ${currentIndex + 1}`;
+    imgs[0].alt = imgs[2].alt = '';
+    lbCount.textContent = `${currentIndex + 1} / ${currentProject.photos.length}`;
+    animating = false;
+  }
+
+  // Animated navigation (used by the arrows and the keyboard).
+  function navigate(dir) {
+    if (!currentProject || animating) return;
+    if (currentProject.photos.length < 2) return;
+    animating = true;
+    W = viewport.clientWidth;
+    setTrack(-W, 0);
+    void track.offsetWidth;
+    animateTrackTo(dir > 0 ? -2 * W : 0, 300, () => recycle(dir));
+  }
 
   function open(projectIdx, photoIdx = 0) {
     currentProject = projects[projectIdx];
     currentIndex = photoIdx;
-    update();
     lb.dataset.open = '1';
     lb.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    render(); // lightbox must be visible first so the viewport has a width
   }
   function close() {
     lb.dataset.open = '0';
@@ -240,77 +317,89 @@ document.getElementById('year').textContent = new Date().getFullYear();
     document.body.style.overflow = '';
     currentProject = null;
   }
-  function step(delta) {
-    if (!currentProject) return;
-    const n = currentProject.photos.length;
-    currentIndex = (currentIndex + delta + n) % n;
-    update();
-  }
-  function update() {
-    if (!currentProject) return;
-    lbImg.src = currentProject.photos[currentIndex];
-    lbImg.alt = `${currentProject.title} — foto ${currentIndex + 1}`;
-    lbCount.textContent = `${currentIndex + 1} / ${currentProject.photos.length}`;
-  }
 
   grid.addEventListener('click', (e) => {
     const card = e.target.closest('.project-card');
     if (!card) return;
     open(Number(card.dataset.projectIdx));
   });
-  btnPrev.addEventListener('click', () => step(-1));
-  btnNext.addEventListener('click', () => step(+1));
+  btnPrev.addEventListener('click', () => navigate(-1));
+  btnNext.addEventListener('click', () => navigate(+1));
   btnClose.addEventListener('click', close);
   lb.addEventListener('click', (e) => {
-    if (swiped) { swiped = false; return; } // ignore the click that ends a swipe
-    if (e.target === lb) close();
+    if (swiped) { swiped = false; return; }                    // ignore the post-drag click
+    if (e.target.closest('.lightbox__close, .lightbox__prev, .lightbox__next')) return;
+    if (e.target.tagName === 'IMG') return;                    // tapping the photo keeps it open
+    close();                                                   // tap on the dark area closes
   });
   document.addEventListener('keydown', (e) => {
     if (lb.dataset.open !== '1') return;
     if (e.key === 'Escape') close();
-    if (e.key === 'ArrowLeft') step(-1);
-    if (e.key === 'ArrowRight') step(+1);
+    if (e.key === 'ArrowLeft') navigate(-1);
+    if (e.key === 'ArrowRight') navigate(+1);
   });
 
-  // --------- Touch swipe (iPad / phone) ----------
-  // Drag the photo with one finger; release past the threshold to navigate.
-  let startX = 0, startY = 0, dx = 0, dragging = false, horizontal = null;
-  const SWIPE_THRESHOLD = 45; // px before a horizontal swipe counts as navigation
+  // --------- Touch swipe carousel (iPad / phone) ----------
+  // Drag the strip with one finger — the neighbouring photos follow — then a
+  // flick or a drag past ~18% of the width settles onto the next/previous one.
+  let dragging = false, horizontal = null;
+  let startX = 0, startY = 0, dx = 0, dy = 0, baseX = 0, lastX = 0, lastT = 0, vel = 0;
+  const FLICK_VEL = 0.45;  // px/ms — a quick flick navigates even if short
+  const DIST_FRAC = 0.18;  // fraction of the width that also navigates
 
-  lb.addEventListener('touchstart', (e) => {
-    if (lb.dataset.open !== '1' || !currentProject) return;
+  viewport.addEventListener('touchstart', (e) => {
+    if (lb.dataset.open !== '1' || !currentProject || animating) return;
     if (currentProject.photos.length < 2 || e.touches.length !== 1) return;
-    startX = e.touches[0].clientX;
+    W = viewport.clientWidth;
+    baseX = -W;
+    startX = lastX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
-    dx = 0; dragging = true; horizontal = null;
-    lbImg.style.transition = 'none';
+    lastT = performance.now();
+    dx = 0; dy = 0; vel = 0; dragging = true; horizontal = null;
+    setTrack(baseX, 0);
   }, { passive: true });
 
-  lb.addEventListener('touchmove', (e) => {
+  viewport.addEventListener('touchmove', (e) => {
     if (!dragging || e.touches.length !== 1) return;
-    dx = e.touches[0].clientX - startX;
-    const dy = e.touches[0].clientY - startY;
-    if (horizontal === null) horizontal = Math.abs(dx) > Math.abs(dy);
-    if (horizontal) {
-      e.preventDefault(); // claim the gesture so the page / back-swipe stays put
-      lbImg.style.transform = `translateX(${dx}px)`;
-    }
+    const x = e.touches[0].clientX, y = e.touches[0].clientY;
+    dx = x - startX;
+    dy = y - startY;
+    if (horizontal === null) horizontal = Math.abs(dx) > Math.abs(dy) + 2;
+    if (!horizontal) return;
+    e.preventDefault(); // claim the horizontal gesture (no page scroll / back-swipe)
+    const now = performance.now();
+    if (now > lastT) vel = (x - lastX) / (now - lastT);
+    lastX = x; lastT = now;
+    const cdx = Math.max(-W, Math.min(W, dx)); // never drag past a single neighbour
+    setTrack(baseX + cdx, 0);
   }, { passive: false });
 
   function endSwipe() {
     if (!dragging) return;
     dragging = false;
-    if (horizontal && Math.abs(dx) > SWIPE_THRESHOLD) {
+    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
       swiped = true;
-      setTimeout(() => { swiped = false; }, 350); // self-clear so it never eats a later tap
-      lbImg.style.transition = 'none';
-      lbImg.style.transform = '';
-      step(dx < 0 ? +1 : -1); // swipe left → next, swipe right → previous
+      setTimeout(() => { swiped = false; }, 400); // self-clear so it never eats a later tap
+    }
+    if (!horizontal) return; // vertical drag: track never moved, nothing to settle
+    const cdx = Math.max(-W, Math.min(W, dx));
+    let dir = 0;
+    if (dx <= -W * DIST_FRAC || vel <= -FLICK_VEL) dir = +1;       // left  → next
+    else if (dx >= W * DIST_FRAC || vel >= FLICK_VEL) dir = -1;    // right → previous
+    if (dir !== 0) {
+      animating = true;
+      const target = dir > 0 ? -2 * W : 0;
+      const remaining = Math.abs(target - (baseX + cdx));
+      const dur = Math.max(160, Math.min(320, remaining / Math.max(0.9, Math.abs(vel))));
+      animateTrackTo(target, dur, () => recycle(dir));
     } else {
-      lbImg.style.transition = 'transform .25s ease';
-      lbImg.style.transform = '';
+      animateTrackTo(baseX, 240, null); // didn't reach the threshold → snap back
     }
   }
-  lb.addEventListener('touchend', endSwipe);
-  lb.addEventListener('touchcancel', endSwipe);
+  viewport.addEventListener('touchend', endSwipe);
+  viewport.addEventListener('touchcancel', endSwipe);
+
+  window.addEventListener('resize', () => {
+    if (lb.dataset.open === '1' && !dragging && !animating) render();
+  });
 })();
