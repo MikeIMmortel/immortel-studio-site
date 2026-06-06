@@ -234,6 +234,54 @@ document.getElementById('year').textContent = new Date().getFullYear();
   let animating = false;  // lock input while a settle animation runs
   let W = 0;              // viewport width in px
 
+  // --------- Zoom state (applied to the centred image only) ----------
+  const MAX_SCALE = 4;          // hard ceiling for pinch
+  const DOUBLE_TAP_SCALE = 2.5; // how far a double-tap zooms in
+  let scale = 1, tx = 0, ty = 0;        // current transform of the centred image
+  let baseW = 0, baseH = 0;             // its rendered (contain-fit) size at scale 1
+
+  const centerImg = () => imgs[1];
+
+  // Rendered size of the centred photo, mirroring the CSS max 92vw × 90vh contain.
+  function measureBase() {
+    const img = centerImg();
+    const nW = img.naturalWidth, nH = img.naturalHeight;
+    if (!nW || !nH) { baseW = viewport.clientWidth; baseH = viewport.clientHeight; return; }
+    const fit = Math.min(1, window.innerWidth * 0.92 / nW, window.innerHeight * 0.90 / nH);
+    baseW = nW * fit; baseH = nH * fit;
+  }
+
+  // Keep the zoomed image from drifting past its own edges.
+  function clampTranslate() {
+    const maxX = Math.max(0, (baseW * scale - viewport.clientWidth) / 2);
+    const maxY = Math.max(0, (baseH * scale - viewport.clientHeight) / 2);
+    tx = Math.max(-maxX, Math.min(maxX, tx));
+    ty = Math.max(-maxY, Math.min(maxY, ty));
+  }
+
+  function applyZoom(animate) {
+    const img = centerImg();
+    img.style.transition = animate ? `transform 240ms ${EASE}` : 'none';
+    img.style.transform = scale === 1 ? '' : `translate3d(${tx}px, ${ty}px, 0) scale(${scale})`;
+  }
+
+  // Drop back to 1× and clear the inline transform on every slide.
+  function resetZoom(animate) {
+    scale = 1; tx = 0; ty = 0;
+    imgs.forEach(im => {
+      if (animate && im === imgs[1]) {
+        im.style.transition = `transform 240ms ${EASE}`;
+        im.style.transform = 'translate3d(0,0,0) scale(1)';
+        const clear = () => { im.style.transition = 'none'; im.style.transform = ''; im.removeEventListener('transitionend', clear); };
+        im.addEventListener('transitionend', clear);
+        setTimeout(clear, 320);
+      } else {
+        im.style.transition = 'none';
+        im.style.transform = '';
+      }
+    });
+  }
+
   const wrap = (i) => {
     const n = currentProject.photos.length;
     return ((i % n) + n) % n;
@@ -254,6 +302,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
     imgs[1].alt = `${currentProject.title} — foto ${currentIndex + 1}`;
     imgs[0].alt = imgs[2].alt = '';
     lbCount.textContent = `${currentIndex + 1} / ${currentProject.photos.length}`;
+    resetZoom(false);
     W = viewport.clientWidth;
     setTrack(-W, 0);
     void track.offsetWidth; // flush so the next transition starts cleanly
@@ -281,6 +330,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
     else         track.insertBefore(track.lastElementChild, track.firstElementChild);
     slides = Array.from(track.children);
     imgs   = slides.map(s => s.querySelector('img'));
+    resetZoom(false);
     W = viewport.clientWidth;
     setTrack(-W, 0);
     void track.offsetWidth;
@@ -296,6 +346,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
   function navigate(dir) {
     if (!currentProject || animating) return;
     if (currentProject.photos.length < 2) return;
+    resetZoom(false);
     animating = true;
     W = viewport.clientWidth;
     setTrack(-W, 0);
@@ -339,49 +390,73 @@ document.getElementById('year').textContent = new Date().getFullYear();
     if (e.key === 'ArrowRight') navigate(+1);
   });
 
-  // --------- Touch swipe carousel (iPad / phone) ----------
-  // Drag the strip with one finger — the neighbouring photos follow — then a
-  // flick or a drag past ~18% of the width settles onto the next/previous one.
+  // --------- Touch gestures (iPad / phone): swipe · pinch-zoom · pan ----------
+  // One finger at 1×: drag the strip — a flick or a drag past ~18% settles onto
+  // the next/previous photo. Two fingers: pinch to zoom the centred photo. Once
+  // zoomed in, one finger pans within it; a double-tap toggles zoom in/out.
+  let mode = null;                 // null | 'swipe' | 'pan' | 'pinch' | 'tap'
   let dragging = false, horizontal = null;
   let startX = 0, startY = 0, dx = 0, dy = 0, baseX = 0, lastX = 0, lastT = 0, vel = 0;
+  let panStartX = 0, panStartY = 0, panBaseTx = 0, panBaseTy = 0;
+  let pinchDist0 = 1, pinchScale0 = 1, pinchTx0 = 0, pinchTy0 = 0, pinchMidX0 = 0, pinchMidY0 = 0;
+  let lastTapT = 0, lastTapX = 0, lastTapY = 0;
   const FLICK_VEL = 0.45;  // px/ms — a quick flick navigates even if short
   const DIST_FRAC = 0.18;  // fraction of the width that also navigates
 
-  viewport.addEventListener('touchstart', (e) => {
-    if (lb.dataset.open !== '1' || !currentProject || animating) return;
-    if (currentProject.photos.length < 2 || e.touches.length !== 1) return;
+  const touchDist = (t) => Math.hypot(t[1].clientX - t[0].clientX, t[1].clientY - t[0].clientY);
+  function touchMid(t) {
+    const r = viewport.getBoundingClientRect();
+    return { x: (t[0].clientX + t[1].clientX) / 2 - r.left, y: (t[0].clientY + t[1].clientY) / 2 - r.top };
+  }
+
+  function beginPinch(e) {
+    mode = 'pinch'; dragging = false;
     W = viewport.clientWidth;
-    baseX = -W;
-    startX = lastX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    lastT = performance.now();
-    dx = 0; dy = 0; vel = 0; dragging = true; horizontal = null;
-    setTrack(baseX, 0);
-  }, { passive: true });
+    setTrack(-W, 0);          // recentre in case a swipe was mid-drag
+    measureBase();
+    pinchDist0 = touchDist(e.touches) || 1;
+    pinchScale0 = scale; pinchTx0 = tx; pinchTy0 = ty;
+    const m = touchMid(e.touches);
+    pinchMidX0 = m.x - viewport.clientWidth / 2;
+    pinchMidY0 = m.y - viewport.clientHeight / 2;
+    centerImg().style.transition = 'none';
+  }
 
-  viewport.addEventListener('touchmove', (e) => {
-    if (!dragging || e.touches.length !== 1) return;
-    const x = e.touches[0].clientX, y = e.touches[0].clientY;
-    dx = x - startX;
-    dy = y - startY;
-    if (horizontal === null) horizontal = Math.abs(dx) > Math.abs(dy) + 2;
-    if (!horizontal) return;
-    e.preventDefault(); // claim the horizontal gesture (no page scroll / back-swipe)
+  // Double-tap (or two-finger end) settle: snap fully out below ~1×, else clamp.
+  function endZoomGesture() {
+    mode = null; dragging = false;
+    if (scale <= 1.02) resetZoom(true);
+    else { clampTranslate(); applyZoom(true); }
+    swiped = true;
+    setTimeout(() => { swiped = false; }, 400);
+  }
+
+  function toggleZoomAt(px, py) {
+    measureBase();
+    if (scale > 1.02) { resetZoom(true); return; }
+    const fx = px - viewport.clientWidth / 2;
+    const fy = py - viewport.clientHeight / 2;
+    scale = DOUBLE_TAP_SCALE;
+    tx = fx * (1 - scale);   // keep the tapped point under the finger
+    ty = fy * (1 - scale);
+    clampTranslate();
+    applyZoom(true);
+    swiped = true;
+    setTimeout(() => { swiped = false; }, 400);
+  }
+
+  function handleTap(e) {
+    const t = e.changedTouches[0];
+    const r = viewport.getBoundingClientRect();
+    const px = t.clientX - r.left, py = t.clientY - r.top;
     const now = performance.now();
-    if (now > lastT) vel = (x - lastX) / (now - lastT);
-    lastX = x; lastT = now;
-    const cdx = Math.max(-W, Math.min(W, dx)); // never drag past a single neighbour
-    setTrack(baseX + cdx, 0);
-  }, { passive: false });
+    const isDouble = (now - lastTapT < 300) && Math.abs(px - lastTapX) < 40 && Math.abs(py - lastTapY) < 40;
+    lastTapT = now; lastTapX = px; lastTapY = py;
+    if (isDouble) { lastTapT = 0; toggleZoomAt(px, py); }
+  }
 
-  function endSwipe() {
-    if (!dragging) return;
-    dragging = false;
-    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
-      swiped = true;
-      setTimeout(() => { swiped = false; }, 400); // self-clear so it never eats a later tap
-    }
-    if (!horizontal) return; // vertical drag: track never moved, nothing to settle
+  function settleSwipe() {
+    if (!horizontal) { setTrack(baseX, 0); return; }
     const cdx = Math.max(-W, Math.min(W, dx));
     let dir = 0;
     if (dx <= -W * DIST_FRAC || vel <= -FLICK_VEL) dir = +1;       // left  → next
@@ -396,10 +471,127 @@ document.getElementById('year').textContent = new Date().getFullYear();
       animateTrackTo(baseX, 240, null); // didn't reach the threshold → snap back
     }
   }
-  viewport.addEventListener('touchend', endSwipe);
-  viewport.addEventListener('touchcancel', endSwipe);
+
+  viewport.addEventListener('touchstart', (e) => {
+    if (lb.dataset.open !== '1' || !currentProject || animating) return;
+    if (e.touches.length >= 2) { beginPinch(e); e.preventDefault(); return; }
+
+    const t = e.touches[0];
+    if (scale > 1.02) {                       // already zoomed → pan
+      mode = 'pan'; dragging = false;
+      measureBase();
+      panStartX = t.clientX; panStartY = t.clientY; panBaseTx = tx; panBaseTy = ty;
+      centerImg().style.transition = 'none';
+      return;
+    }
+
+    startX = lastX = t.clientX; startY = t.clientY;
+    dx = 0; dy = 0; lastT = performance.now();
+    if (currentProject.photos.length >= 2) {  // not zoomed, multi-photo → swipe
+      mode = 'swipe';
+      W = viewport.clientWidth; baseX = -W;
+      vel = 0; dragging = true; horizontal = null;
+      setTrack(baseX, 0);
+    } else {                                   // single photo → only tap/double-tap
+      mode = 'tap'; dragging = false;
+    }
+  }, { passive: false });
+
+  viewport.addEventListener('touchmove', (e) => {
+    if (mode === 'pinch') {
+      if (e.touches.length < 2) return;
+      e.preventDefault();
+      let s = Math.max(1, Math.min(MAX_SCALE, pinchScale0 * (touchDist(e.touches) / pinchDist0)));
+      const m = touchMid(e.touches);
+      const midX = m.x - viewport.clientWidth / 2, midY = m.y - viewport.clientHeight / 2;
+      const ratio = s / pinchScale0;
+      scale = s;
+      tx = midX - ratio * (pinchMidX0 - pinchTx0);  // focal-point zoom + two-finger drift
+      ty = midY - ratio * (pinchMidY0 - pinchTy0);
+      clampTranslate();
+      applyZoom(false);
+      return;
+    }
+    if (mode === 'pan') {
+      if (e.touches.length !== 1) return;
+      e.preventDefault();
+      const t = e.touches[0];
+      tx = panBaseTx + (t.clientX - panStartX);
+      ty = panBaseTy + (t.clientY - panStartY);
+      clampTranslate();
+      applyZoom(false);
+      return;
+    }
+    if (mode === 'swipe') {
+      if (!dragging || e.touches.length !== 1) return;
+      const x = e.touches[0].clientX, y = e.touches[0].clientY;
+      dx = x - startX; dy = y - startY;
+      if (horizontal === null) horizontal = Math.abs(dx) > Math.abs(dy) + 2;
+      if (!horizontal) return;
+      e.preventDefault(); // claim the horizontal gesture (no page scroll / back-swipe)
+      const now = performance.now();
+      if (now > lastT) vel = (x - lastX) / (now - lastT);
+      lastX = x; lastT = now;
+      const cdx = Math.max(-W, Math.min(W, dx)); // never drag past a single neighbour
+      setTrack(baseX + cdx, 0);
+      return;
+    }
+    if (mode === 'tap' && e.touches.length === 1) {
+      dx = e.touches[0].clientX - startX; dy = e.touches[0].clientY - startY;
+    }
+  }, { passive: false });
+
+  function onTouchEnd(e) {
+    if (mode === 'pinch') {
+      if (e.touches.length >= 2) return;                 // still pinching
+      if (e.touches.length === 1 && scale > 1.02) {      // a finger lifted → keep panning
+        mode = 'pan';
+        const t = e.touches[0];
+        panStartX = t.clientX; panStartY = t.clientY; panBaseTx = tx; panBaseTy = ty;
+        return;
+      }
+      endZoomGesture();
+      return;
+    }
+    if (mode === 'pan') {
+      if (e.touches.length === 2) { beginPinch(e); return; } // second finger back down
+      if (e.touches.length >= 1) return;
+      const t = e.changedTouches[0];
+      const moved = Math.hypot(t.clientX - panStartX, t.clientY - panStartY) > 10;
+      if (moved) {
+        endZoomGesture();        // a real pan → settle within bounds
+      } else {
+        handleTap(e);            // a tap while zoomed → double-tap zooms back out
+        mode = null; dragging = false;
+      }
+      return;
+    }
+    if (mode === 'swipe' || mode === 'tap') {
+      if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+        swiped = true;
+        setTimeout(() => { swiped = false; }, 400); // self-clear so it never eats a later tap
+        if (mode === 'swipe') settleSwipe();
+      } else {
+        handleTap(e);
+      }
+      mode = null; dragging = false;
+    }
+  }
+
+  function onTouchCancel() {
+    if (mode === 'pinch' || mode === 'pan') endZoomGesture();
+    else if (mode === 'swipe' && horizontal) animateTrackTo(baseX, 240, null);
+    mode = null; dragging = false;
+  }
+
+  viewport.addEventListener('touchend', onTouchEnd);
+  viewport.addEventListener('touchcancel', onTouchCancel);
+
+  // Suppress Safari's native page magnify so our pinch is the only zoom.
+  ['gesturestart', 'gesturechange', 'gestureend'].forEach(type =>
+    lb.addEventListener(type, (e) => { if (lb.dataset.open === '1') e.preventDefault(); }));
 
   window.addEventListener('resize', () => {
-    if (lb.dataset.open === '1' && !dragging && !animating) render();
+    if (lb.dataset.open === '1' && !mode && !animating) render();
   });
 })();

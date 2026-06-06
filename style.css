@@ -1060,7 +1060,7 @@ a.lab__card { cursor: pointer; }
   position: absolute;
   inset: 0;
   overflow: hidden;
-  touch-action: pan-y; /* horizontal swipe is handled in JS */
+  touch-action: none; /* swipe + pinch-zoom are handled in JS */
 }
 .lightbox__track {
   display: flex;
@@ -1083,6 +1083,7 @@ a.lab__card { cursor: pointer; }
   object-fit: contain;
   -webkit-user-drag: none;
   user-select: none;
+  transform-origin: center center; /* zoom pivots on the image centre */
 }
 .lightbox__close,
 .lightbox__prev,
