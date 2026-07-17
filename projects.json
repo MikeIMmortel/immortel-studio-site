@@ -2,6 +2,19 @@
   "projects" : [
     {
       "photos" : [
+        "images\/tv-meubelservieskast\/01.jpg",
+        "images\/tv-meubelservieskast\/02.jpg",
+        "images\/tv-meubelservieskast\/03-render.jpg",
+        "images\/tv-meubelservieskast\/04.jpg"
+      ],
+      "projectFolderPath" : "\/Users\/mikevandemortel\/Library\/Mobile Documents\/com~apple~CloudDocs\/05-Immortel\/ImmortelStudio\/Cabinetflow\/projects\/1016-Marloes_DeGreef-Kasten",
+      "projectName" : "1016-Marloes_DeGreef-Kasten",
+      "slug" : "tv-meubelservieskast",
+      "summary" : "Tv-meubel op maat, uitgevoerd in FA415 Eiken.",
+      "title" : "Tv-meubel\/servieskast"
+    },
+    {
+      "photos" : [
         "images\/berging\/01.jpg",
         "images\/berging\/02.jpg",
         "images\/berging\/03.jpg",
