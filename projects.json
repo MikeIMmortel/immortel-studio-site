@@ -2,6 +2,22 @@
   "projects" : [
     {
       "photos" : [
+        "images\/berging\/01.jpg",
+        "images\/berging\/02.jpg",
+        "images\/berging\/03.jpg",
+        "images\/berging\/04.jpg",
+        "images\/berging\/05.jpg",
+        "images\/berging\/06.jpg",
+        "images\/berging\/07.jpg"
+      ],
+      "projectFolderPath" : "\/Users\/mikevandemortel\/Library\/Mobile Documents\/com~apple~CloudDocs\/05-Immortel\/ImmortelStudio\/Cabinetflow\/projects\/1009-Manders-Kast",
+      "projectName" : "1009-Manders-Kast",
+      "slug" : "berging",
+      "summary" : "Berging\/speelkamer met bureau , uitgevoerd in U211 st9",
+      "title" : "Berging"
+    },
+    {
+      "photos" : [
         "images\/niskast-graphite-black\/01.jpg",
         "images\/niskast-graphite-black\/02-render.jpg",
         "images\/niskast-graphite-black\/03.jpg"
