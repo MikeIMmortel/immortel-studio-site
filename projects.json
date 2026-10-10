@@ -2,6 +2,19 @@
   "projects" : [
     {
       "photos" : [
+        "images\/badkamermeubel-2\/01.jpg",
+        "images\/badkamermeubel-2\/02.jpg",
+        "images\/badkamermeubel-2\/03-render.jpg",
+        "images\/badkamermeubel-2\/04.jpg"
+      ],
+      "projectFolderPath" : "\/Users\/mikevandemortel\/Library\/Mobile Documents\/com~apple~CloudDocs\/05-Immortel\/ImmortelStudio\/Cabinetflow\/projects\/1013-Saskia_Molenschot-badkamer",
+      "projectName" : "1013-Saskia_Molenschot-badkamer",
+      "slug" : "badkamermeubel-2",
+      "summary" : "2 meubels voor met ieder een aparte la.",
+      "title" : "Badkamermeubel"
+    },
+    {
+      "photos" : [
         "images\/tv-meubelservieskast\/01.jpg",
         "images\/tv-meubelservieskast\/02.jpg",
         "images\/tv-meubelservieskast\/03-render.jpg",
