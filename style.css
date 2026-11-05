@@ -669,7 +669,7 @@ body.menu-open { overflow: hidden; }
 .prose .about__cta { border-bottom: 1px solid var(--ink); }
 
 /* ============================================================
-   Work — editorial grid (first card spans 2 cols)
+   Work — project grid with square covers
    ============================================================ */
 .project-grid {
   display: grid;
@@ -680,12 +680,6 @@ body.menu-open { overflow: hidden; }
   .project-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(2.5rem, 4vw, 4rem) clamp(2rem, 3vw, 3rem);
-  }
-  .project-grid .project-card:first-child {
-    grid-column: 1 / -1;
-  }
-  .project-grid .project-card:first-child .project-card__cover {
-    aspect-ratio: 16 / 9;
   }
 }
 .project-card {
@@ -700,14 +694,14 @@ body.menu-open { overflow: hidden; }
   width: 100%;
 }
 .project-card__cover {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1;
   overflow: hidden;
   background: var(--bg-alt);
   position: relative;
 }
 .project-card__cover img {
-  width: 100%; height: 100%; object-fit: cover;
-  transition: transform 1s var(--ease), filter .4s var(--ease);
+  width: 100%; height: 100%; object-fit: contain;
+  transition: filter .4s var(--ease);
 }
 .project-card__badge {
   position: absolute;
@@ -746,7 +740,6 @@ body.menu-open { overflow: hidden; }
   }
 }
 .project-card:hover .project-card__cover img {
-  transform: scale(1.04);
   filter: brightness(.98);
 }
 .project-card__meta {
