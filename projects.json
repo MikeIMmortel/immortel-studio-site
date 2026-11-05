@@ -2,6 +2,19 @@
   "projects" : [
     {
       "photos" : [
+        "images\/buitenkeuken\/01.jpg",
+        "images\/buitenkeuken\/02-render.jpg",
+        "images\/buitenkeuken\/03-render.jpg",
+        "images\/buitenkeuken\/04.jpg"
+      ],
+      "projectFolderPath" : "\/Users\/mikevandemortel\/Library\/Mobile Documents\/com~apple~CloudDocs\/05-Immortel\/ImmortelStudio\/Cabinetflow\/projects\/1014-Melle_Scholten-Bistro",
+      "projectName" : "1014-Melle_Scholten-Bistro",
+      "slug" : "buitenkeuken",
+      "summary" : "Buitenkeuken met eikenfineer en groene zwembadtegels, perfect bij de GreenEgg.",
+      "title" : "Buitenkeuken"
+    },
+    {
+      "photos" : [
         "images\/schappen\/01.jpg",
         "images\/schappen\/02.jpg",
         "images\/schappen\/03.jpg"
